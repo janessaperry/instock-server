@@ -8,6 +8,8 @@ router
   .get(
     "/:warehouseId/inventories",
     warehouseController.getWarehouseInventoryById
-  );
+  )
+  .post("/add", warehouseController.addNewWarehouse)
+  .put("/:warehouseId/edit", warehouseController.editExistingWarehouse);
 
 export default router;

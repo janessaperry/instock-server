@@ -80,3 +80,38 @@ export const getWarehouseInventoryById = async (req, res) => {
     });
   }
 };
+
+export const addNewWarehouse = async (req, res) => {
+  const newWarehouse = req.body;
+  try {
+    await knex("warehouses").insert(newWarehouse);
+    return res
+      .status(201)
+      .json({ message: "New warehouse succesfully added", newWarehouse });
+  } catch (error) {
+    console.error(`Error adding new warehouse: ${error}`);
+    res.status(500).json({ message: `Error adding new warehouse to database` });
+  }
+};
+
+export const editExistingWarehouse = async (req, res) => {
+  const { warehouseId } = req.params;
+  const updatedWarehouse = req.body;
+  try {
+    await knex("warehouses")
+      .where({
+        id: warehouseId,
+      })
+      .update(updatedWarehouse);
+
+    return res.status(200).json({
+      message: `Warehouse ${warehouseId} uppdated successfully`,
+      updatedWarehouse,
+    });
+  } catch (error) {
+    console.error(`Error updating warehouse ${warehouseId}: ${error}`);
+    res
+      .status(500)
+      .json({ message: `Error updating warehouse ${warehouseId}` });
+  }
+};
