@@ -10,6 +10,7 @@ router
     warehouseController.getWarehouseInventoryById
   )
   .post("/add", warehouseController.addNewWarehouse)
-  .put("/:warehouseId/edit", warehouseController.editExistingWarehouse);
+  .put("/:warehouseId/edit", warehouseController.editExistingWarehouse)
+  .delete("/:warehouseId", warehouseController.deleteWarehouse);
 
 export default router;

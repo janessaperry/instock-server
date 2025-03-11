@@ -98,10 +98,23 @@ export const editExistingWarehouse = async (req, res) => {
   const { warehouseId } = req.params;
   const updatedWarehouse = req.body;
   try {
+    const warehouseDetailsData = await knex("warehouses")
+      .where({
+        id: warehouseId,
+      })
+      .first();
+
+    if (!warehouseDetailsData) {
+      return res
+        .status(404)
+        .json({ message: `Warehouse with id ${warehouseId} not found` });
+    }
+
     await knex("warehouses")
       .where({
         id: warehouseId,
       })
+      .first()
       .update(updatedWarehouse);
 
     return res.status(200).json({
@@ -113,5 +126,20 @@ export const editExistingWarehouse = async (req, res) => {
     res
       .status(500)
       .json({ message: `Error updating warehouse ${warehouseId}` });
+  }
+};
+
+export const deleteWarehouse = async (req, res) => {
+  const { warehouseId } = req.params;
+  try {
+    await knex("warehouses").where({ id: warehouseId }).delete();
+    res
+      .status(204)
+      .json({ message: `Warehouse ${warehouseId} has been deleted` });
+  } catch (error) {
+    console.error(`Error deleting warehouse ${warehouseId}: ${error}`);
+    res
+      .status(500)
+      .json({ message: `Error deleting warehouse ${warehouseId}` });
   }
 };
