@@ -1,21 +1,21 @@
-import initKnex from "knex";
-import configuration from "../knexfile.js";
-
-const knex = initKnex(configuration);
+import sql from "../db/db.js";
 
 export const getAllWarehouses = async (_req, res) => {
   try {
-    const warehousesData = await knex("warehouses").select(
-      "id",
-      "warehouse_name",
-      "address",
-      "city",
-      "country",
-      "contact_name",
-      "contact_position",
-      "contact_phone",
-      "contact_email"
-    );
+    const warehousesData = await sql`
+      SELECT 
+        id, 
+        warehouse_name, 
+        address, 
+        city, 
+        country, 
+        contact_name, 
+        contact_position, 
+        contact_phone, 
+        contact_email
+      FROM warehouses
+      ORDER BY id
+    `;
     return res.status(200).json(warehousesData);
   } catch (error) {
     console.error("Error getting warehouses:", error);
@@ -26,28 +26,31 @@ export const getAllWarehouses = async (_req, res) => {
 export const getWarehouseById = async (req, res) => {
   const { warehouseId } = req.params;
   try {
-    const warehouseDetailsData = await knex("warehouses")
-      .select(
-        "id",
-        "warehouse_name",
-        "address",
-        "city",
-        "country",
-        "contact_name",
-        "contact_position",
-        "contact_phone",
-        "contact_email"
-      )
-      .where({ id: warehouseId })
-      .first();
+    const warehouseDetailsData = await sql`
+      SELECT 
+        id,
+        warehouse_name,
+        address,
+        city,
+        country,
+        contact_name,
+        contact_position,
+        contact_phone,
+        contact_email
+      FROM warehouses
+      WHERE id = ${warehouseId}
+      LIMIT 1
+    `;
 
-    if (!warehouseDetailsData) {
+    let foundWarehouse = warehouseDetailsData[0];
+
+    if (!foundWarehouse) {
       return res
         .status(404)
         .json({ message: `Warehouse with id ${warehouseId} not found` });
     }
 
-    return res.status(200).json(warehouseDetailsData);
+    return res.status(200).json(foundWarehouse);
   } catch (error) {
     res.status(500).send(`Error getting warehouse ${warehouseId} by id`);
   }
@@ -56,19 +59,40 @@ export const getWarehouseById = async (req, res) => {
 export const getWarehouseInventoryById = async (req, res) => {
   const { warehouseId } = req.params;
   try {
-    const warehouseDetailsData = await knex("warehouses")
-      .where({ id: warehouseId })
-      .first();
+    const warehouseDetailsData = await sql`
+      SELECT 
+        id,
+        warehouse_name,
+        address,
+        city,
+        country,
+        contact_name,
+        contact_position,
+        contact_phone,
+        contact_email
+      FROM warehouses
+      WHERE id = ${warehouseId}
+      LIMIT 1
+    `;
 
-    if (!warehouseDetailsData) {
+    let foundWarehouse = warehouseDetailsData[0];
+
+    if (!foundWarehouse) {
       return res
         .status(404)
         .json({ message: `Warehouse with id ${warehouseId} not found` });
     }
 
-    const inventoryData = await knex("inventories")
-      .select("id", "item_name", "category", "status", "quantity")
-      .where({ warehouse_id: warehouseId });
+    const inventoryData = await sql`
+      SELECT 
+        id,
+        item_name,
+        category,
+        status,
+        quantity
+      FROM inventories
+      WHERE warehouse_id = ${warehouseId}
+    `;
 
     return res.status(200).json(inventoryData);
   } catch (error) {
@@ -84,7 +108,10 @@ export const getWarehouseInventoryById = async (req, res) => {
 export const addNewWarehouse = async (req, res) => {
   const newWarehouse = req.body;
   try {
-    await knex("warehouses").insert(newWarehouse);
+    await sql`
+      INSERT INTO warehouses ${sql(newWarehouse)}
+    `;
+
     return res
       .status(201)
       .json({ message: "New warehouse succesfully added", newWarehouse });
@@ -98,27 +125,38 @@ export const editExistingWarehouse = async (req, res) => {
   const { warehouseId } = req.params;
   const updatedWarehouse = req.body;
   try {
-    const warehouseDetailsData = await knex("warehouses")
-      .where({
-        id: warehouseId,
-      })
-      .first();
+    const warehouseDetailsData = await sql`
+      SELECT 
+        id,
+        warehouse_name,
+        address,
+        city,
+        country,
+        contact_name,
+        contact_position,
+        contact_phone,
+        contact_email
+      FROM warehouses
+      WHERE id = ${warehouseId}
+      LIMIT 1
+    `;
 
-    if (!warehouseDetailsData) {
+    let foundWarehouse = warehouseDetailsData[0] || null;
+
+    if (!foundWarehouse) {
       return res
         .status(404)
         .json({ message: `Warehouse with id ${warehouseId} not found` });
     }
 
-    await knex("warehouses")
-      .where({
-        id: warehouseId,
-      })
-      .first()
-      .update(updatedWarehouse);
+    await sql`
+      UPDATE warehouses
+      SET ${sql(updatedWarehouse)}
+      WHERE id = ${warehouseId}
+    `;
 
     return res.status(200).json({
-      message: `Warehouse ${warehouseId} uppdated successfully`,
+      message: `Warehouse ${warehouseId} updated successfully`,
       updatedWarehouse,
     });
   } catch (error) {
@@ -132,7 +170,10 @@ export const editExistingWarehouse = async (req, res) => {
 export const deleteWarehouse = async (req, res) => {
   const { warehouseId } = req.params;
   try {
-    await knex("warehouses").where({ id: warehouseId }).delete();
+    await sql`
+      DELETE FROM warehouses
+      WHERE id = ${warehouseId}
+    `;
     res
       .status(204)
       .json({ message: `Warehouse ${warehouseId} has been deleted` });

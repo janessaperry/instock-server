@@ -1,0 +1,85 @@
+import sql from "../db.js";
+
+export async function seed() {
+  try {
+    await sql`DELETE FROM inventories`;
+    await sql`
+      INSERT INTO inventories (warehouse_id, item_name, description, category, status, quantity)
+      VALUES
+        (1, 'Television', 'This 50", 4K LED TV provides a crystal-clear picture and vivid colors.', 'Electronics', 'In Stock', 500),
+        (1, 'Gym Bag', 'Made out of military-grade synthetic materials, this gym bag is highly durable, water resistant, and easy to clean.', 'Gear', 'Out of Stock', 0),
+        (1, 'Hoodie', 'A simple 100% cotton hoodie, this is an essential piece for any wardrobe.', 'Apparel', 'Out of Stock', 0),
+        (1, 'Keychain', 'Made from 100% genuine leather, this keychain will keep your keys organized while keeping a classic, professional look.', 'Accessories', 'In Stock', 2000),
+        (1, 'Shampoo', 'Natural shampoo made from 99% biodegradable ingredients.', 'Health', 'In Stock', 4350),
+        (1, 'Phone Charger', 'This USB-C phone charger features fast charging for the latest devices.', 'Electronics', 'In Stock', 10000),
+        (1, 'Tent', 'Perfect for spring or summer camping, this 1-person tent is easy to pack and has the option to become modular when used with other products.', 'Gear', 'In Stock', 800),
+        (1, 'Winter Jacket', 'Made with a durable 100% waterproof shell, and breathable layers without a ton of vents and perforations.', 'Apparel', 'Out of Stock', 0),
+        (1, 'Watch', 'Crafted from premium materials including a full-grain leather strap and a stainless steel case, this watch features swiss movement and is waterproof up to 5 ATM.', 'Accessories', 'Out of Stock', 0),
+        (1, 'Soap', 'Organic and hypoallergenic, this soap is safe to use for all skin types.', 'Health', 'In Stock', 12500),
+        (2, 'Monitor', 'A 32" IPS LED ultrawide monitor, perfect for work or gaming.', 'Electronics', 'Out of Stock', 0),
+        (2, 'Backpack', 'This sleek, 40L backpack is completely waterproof making it perfect for adventures or the daily commute.', 'Gear', 'Out of Stock', 0),
+        (2, 'T-Shirt', 'Breathable, and made of 100% organic cotton, this is an essential piece for any wardrobe', 'Apparel', 'Out of Stock', 0),
+        (2, 'Belt', 'Made from 100% full grain leather this belt will go with any dress or casual outfit.', 'Accessories', 'Out of Stock', 0),
+        (2, 'Toothpaste', 'This toothpaste is specially formulated to protect enamel and whiten teeth with natural ingredients.', 'Health', 'In Stock', 4000),
+        (2, 'Mouse', 'With a 1-month battery life this mouse is perfect for travel and productivity.', 'Electronics', 'In Stock', 785),
+        (2, 'Sleeping Bag', 'This ultra-light sleeping bag is packed with an eco-friendly fill. Best used in spring or summer temperatures.', 'Gear', 'In Stock', 987),
+        (2, 'Windbreaker', 'Made from waterproof material, this windbreaker is best layered on top of a sweater to keep warm in inclement conditions.', 'Apparel', 'In Stock', 1185),
+        (2, 'Water Bottle', 'With a 1-litre capacity and BPA-free, this water-bottle is perfect for long days out.', 'Accessories', 'Out of Stock', 0),
+        (2, 'Protein Powder', '100% natural plant-based protein powder from organic ingredients.', 'Health', 'Out of Stock', 0),
+        (3, 'Television', 'This 50", 4K LED TV provides a crystal-clear picture and vivid colors.', 'Electronics', 'Out of Stock', 0),
+        (3, 'Gym Bag', 'Made out of military-grade synthetic materials, this gym bag is highly durable, water resistant, and easy to clean.', 'Gear', 'In Stock', 565),
+        (3, 'Hoodie', 'A simple 100% cotton hoodie, this is an essential piece for any wardrobe.', 'Apparel', 'In Stock', 245),
+        (3, 'Keychain', 'Made from 100% genuine leather, this keychain will keep your keys organized while keeping a classic, professional look.', 'Accessories', 'Out of Stock', 0),
+        (3, 'Shampoo', 'Natural shampoo made from 99% biodegradable ingredients.', 'Health', 'In Stock', 209),
+        (3, 'Phone Charger', 'This USB-C phone charger features fast charging for the latest devices.', 'Electronics', 'Out of Stock', 0),
+        (3, 'Tent', 'Perfect for spring or summer camping, this 1-person tent is easy to pack and has the option to become modular when used with other products.', 'Gear', 'Out of Stock', 0),
+        (3, 'Winter Jacket', 'Made with a durable 100% waterproof shell, and breathable layers without a ton of vents and perforations.', 'Apparel', 'In Stock', 125),
+        (3, 'Watch', 'Crafted from premium materials including a full-grain leather strap and a stainless steel case, this watch features swiss movement and is waterproof up to 5 ATM.', 'Accessories', 'In Stock', 123),
+        (3, 'Soap', 'Organic and hypoallergenic, this soap is safe to use for all skin types.', 'Health', 'In Stock', 863),
+        (4, 'Monitor', 'A 32" IPS LED ultrawide monitor, perfect for work or gaming.', 'Electronics', 'In Stock', 50),
+        (4, 'Backpack', 'This sleek, 40L backpack is completely waterproof making it perfect for adventures or the daily commute.', 'Gear', 'Out of Stock', 0),
+        (4, 'T-Shirt', 'Breathable, and made of 100% organic cotton, this is an essential piece for any wardrobe', 'Apparel', 'Out of Stock', 0),
+        (4, 'Belt', 'Made from 100% full grain leather this belt will go with any dress or casual outfit.', 'Accessories', 'Out of Stock', 0),
+        (4, 'Toothpaste', 'This toothpaste is specially formulated to protect enamel and whiten teeth with natural ingredients.', 'Health', 'In Stock', 400),
+        (4, 'Mouse', 'With a 1-month battery life this mouse is perfect for travel and productivity.', 'Electronics', 'In Stock', 1275),
+        (4, 'Sleeping Bag', 'This ultra-light sleeping bag is packed with an eco-friendly fill. Best used in spring or summer temperatures.', 'Gear', 'In Stock', 5672),
+        (4, 'Windbreaker', 'Made from waterproof material, this windbreaker is best layered on top of a sweater to keep warm in inclement conditions.', 'Apparel', 'In Stock', 374),
+        (4, 'Water Bottle', 'With a 1-litre capacity and BPA-free, this water-bottle is perfect for long days out.', 'Accessories', 'In Stock', 9875),
+        (4, 'Protein Powder', '100% natural plant-based protein powder from organic ingredients.', 'Health', 'Out of Stock', 0),
+        (5, 'Television', 'This 50", 4K LED TV provides a crystal-clear picture and vivid colors.', 'Electronics', 'Out of Stock', 0),
+        (5, 'Gym Bag', 'Made out of military-grade synthetic materials, this gym bag is highly durable, water resistant, and easy to clean.', 'Gear', 'In Stock', 1895),
+        (5, 'Hoodie', 'A simple 100% cotton hoodie, this is an essential piece for any wardrobe.', 'Apparel', 'Out of Stock', 0),
+        (5, 'Keychain', 'Made from 100% genuine leather, this keychain will keep your keys organized while keeping a classic, professional look.', 'Accessories', 'Out of Stock', 0),
+        (5, 'Shampoo', 'Natural shampoo made from 99% biodegradable ingredients.', 'Health', 'In Stock', 4774),
+        (5, 'Phone Charger', 'This USB-C phone charger features fast charging for the latest devices.', 'Electronics', 'In Stock', 9872),
+        (5, 'Tent', 'Perfect for spring or summer camping, this 1-person tent is easy to pack and has the option to become modular when used with other products.', 'Gear', 'In Stock', 3349),
+        (5, 'Winter Jacket', 'Made with a durable 100% waterproof shell, and breathable layers without a ton of vents and perforations.', 'Apparel', 'Out of Stock', 0),
+        (5, 'Watch', 'Crafted from premium materials including a full-grain leather strap and a stainless steel case, this watch features swiss movement and is waterproof up to 5 ATM.', 'Accessories', 'In Stock', 2997),
+        (5, 'Soap', 'Organic and hypoallergenic, this soap is safe to use for all skin types.', 'Health', 'Out of Stock', 0),
+        (6, 'Monitor', 'A 32" IPS LED ultrawide monitor, perfect for work or gaming.', 'Electronics', 'Out of Stock', 0),
+        (6, 'Backpack', 'This sleek, 40L backpack is completely waterproof making it perfect for adventures or the daily commute.', 'Gear', 'In Stock', 607),
+        (6, 'T-Shirt', 'Breathable, and made of 100% organic cotton, this is an essential piece for any wardrobe', 'Apparel', 'In Stock', 1205),
+        (6, 'Belt', 'Made from 100% full grain leather this belt will go with any dress or casual outfit.', 'Accessories', 'In Stock', 9863),
+        (6, 'Toothpaste', 'This toothpaste is specially formulated to protect enamel and whiten teeth with natural ingredients.', 'Health', 'In Stock', 1230),
+        (6, 'Mouse', 'With a 1-month battery life this mouse is perfect for travel and productivity.', 'Electronics', 'Out of Stock', 0),
+        (6, 'Sleeping Bag', 'This ultra-light sleeping bag is packed with an eco-friendly fill. Best used in spring or summer temperatures.', 'Gear', 'Out of Stock', 0),
+        (6, 'Windbreaker', 'Made from waterproof material, this windbreaker is best layered on top of a sweater to keep warm in inclement conditions.', 'Apparel', 'In Stock', 4508),
+        (6, 'Water Bottle', 'With a 1-litre capacity and BPA-free, this water-bottle is perfect for long days out.', 'Accessories', 'In Stock', 2500),
+        (6, 'Protein Powder', '100% natural plant-based protein powder from organic ingredients.', 'Health', 'Out of Stock', 0),
+        (7, 'Television', 'This 50", 4K LED TV provides a crystal-clear picture and vivid colors.', 'Electronics', 'In Stock', 1300),
+        (7, 'Gym Bag', 'Made out of military-grade synthetic materials, this gym bag is highly durable, water resistant, and easy to clean.', 'Gear', 'Out of Stock', 0),
+        (7, 'Hoodie', 'A simple 100% cotton hoodie, this is an essential piece for any wardrobe.', 'Apparel', 'Out of Stock', 0),
+        (7, 'Keychain', 'Made from 100% genuine leather, this keychain will keep your keys organized while keeping a classic, professional look.', 'Accessories', 'In Stock', 298),
+        (7, 'Shampoo', 'Natural shampoo made from 99% biodegradable ingredients.', 'Health', 'In Stock', 2888),
+        (7, 'Phone Charger', 'This USB-C phone charger features fast charging for the latest devices.', 'Electronics', 'In Stock', 983),
+        (7, 'Tent', 'Perfect for spring or summer camping, this 1-person tent is easy to pack and has the option to become modular when used with other products.', 'Gear', 'In Stock', 1406),
+        (7, 'Winter Jacket', 'Made with a durable 100% waterproof shell, and breathable layers without a ton of vents and perforations.', 'Apparel', 'Out of Stock', 0),
+        (7, 'Watch', 'Crafted from premium materials including a full-grain leather strap and a stainless steel case, this watch features swiss movement and is waterproof up to 5 ATM.', 'Accessories', 'Out of Stock', 0),
+        (7, 'Soap', 'Organic and hypoallergenic, this soap is safe to use for all skin types.', 'Health', 'Out of Stock', 0)
+    `;
+    console.log("Inventories data seeded successfully");
+  } catch (error) {
+    console.error("Error seeding inventories data:", error);
+    process.exit(1);
+  }
+}
