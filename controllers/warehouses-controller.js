@@ -19,7 +19,7 @@ export const getAllWarehouses = async (_req, res) => {
     return res.status(200).json(warehousesData);
   } catch (error) {
     console.error("Error getting warehouses:", error);
-    res.status(500).send("Error getting warehouses", error);
+    return res.status(500).send("Error getting warehouses", error);
   }
 };
 
@@ -52,7 +52,7 @@ export const getWarehouseById = async (req, res) => {
 
     return res.status(200).json(foundWarehouse);
   } catch (error) {
-    res.status(500).send(`Error getting warehouse ${warehouseId} by id`);
+    return res.status(500).send(`Error getting warehouse ${warehouseId} by id`);
   }
 };
 
@@ -99,7 +99,7 @@ export const getWarehouseInventoryById = async (req, res) => {
     console.error(
       `Error getting inventory for warehouse ${warehouseId}: ${error}`
     );
-    res.status(500).json({
+    return res.status(500).json({
       message: `Error getting inventory for warehouse ${warehouseId}`,
     });
   }
@@ -117,7 +117,9 @@ export const addNewWarehouse = async (req, res) => {
       .json({ message: "New warehouse succesfully added", newWarehouse });
   } catch (error) {
     console.error(`Error adding new warehouse: ${error}`);
-    res.status(500).json({ message: `Error adding new warehouse to database` });
+    return res
+      .status(500)
+      .json({ message: `Error adding new warehouse to database` });
   }
 };
 
@@ -161,7 +163,7 @@ export const editExistingWarehouse = async (req, res) => {
     });
   } catch (error) {
     console.error(`Error updating warehouse ${warehouseId}: ${error}`);
-    res
+    return res
       .status(500)
       .json({ message: `Error updating warehouse ${warehouseId}` });
   }
@@ -174,12 +176,10 @@ export const deleteWarehouse = async (req, res) => {
       DELETE FROM warehouses
       WHERE id = ${warehouseId}
     `;
-    res
-      .status(204)
-      .json({ message: `Warehouse ${warehouseId} has been deleted` });
+    return res.status(204).end();
   } catch (error) {
     console.error(`Error deleting warehouse ${warehouseId}: ${error}`);
-    res
+    return res
       .status(500)
       .json({ message: `Error deleting warehouse ${warehouseId}` });
   }
