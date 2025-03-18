@@ -19,7 +19,9 @@ export const getAllWarehouses = async (_req, res) => {
     return res.status(200).json(warehousesData);
   } catch (error) {
     console.error("Error getting warehouses:", error);
-    return res.status(500).send("Error getting warehouses", error);
+    return res
+      .status(500)
+      .json({ message: `Error getting warehouses: ${error.message}`, error });
   }
 };
 
@@ -47,12 +49,16 @@ export const getWarehouseById = async (req, res) => {
     if (!foundWarehouse) {
       return res
         .status(404)
-        .json({ message: `Warehouse with id ${warehouseId} not found` });
+        .json({ message: `Warehouse with id ${warehouseId} not found.` });
     }
 
     return res.status(200).json(foundWarehouse);
   } catch (error) {
-    return res.status(500).send(`Error getting warehouse ${warehouseId} by id`);
+    console.error(
+      `Error getting warehouse ${warehouseId} by id: ${error.message}`,
+      error
+    );
+    return res.status(500).json({ message: `Error getting warehouse by id.` });
   }
 };
 
@@ -97,10 +103,11 @@ export const getWarehouseInventoryById = async (req, res) => {
     return res.status(200).json(inventoryData);
   } catch (error) {
     console.error(
-      `Error getting inventory for warehouse ${warehouseId}: ${error}`
+      `Error getting inventory for warehouse ${warehouseId}: ${error.message}`,
+      error
     );
     return res.status(500).json({
-      message: `Error getting inventory for warehouse ${warehouseId}`,
+      message: `Error getting inventory by warehouse id.`,
     });
   }
 };
@@ -116,10 +123,10 @@ export const addNewWarehouse = async (req, res) => {
       .status(201)
       .json({ message: "New warehouse succesfully added", newWarehouse });
   } catch (error) {
-    console.error(`Error adding new warehouse: ${error}`);
+    console.error(`Error adding new warehouse: ${error.message}`, error);
     return res
       .status(500)
-      .json({ message: `Error adding new warehouse to database` });
+      .json({ message: `Error adding new warehouse to database.` });
   }
 };
 
@@ -162,10 +169,13 @@ export const editExistingWarehouse = async (req, res) => {
       updatedWarehouse,
     });
   } catch (error) {
-    console.error(`Error updating warehouse ${warehouseId}: ${error}`);
+    console.error(
+      `Error updating warehouse ${warehouseId}: ${error.message}`,
+      error
+    );
     return res
       .status(500)
-      .json({ message: `Error updating warehouse ${warehouseId}` });
+      .json({ message: `Error updating warehouse ${warehouseId}.` });
   }
 };
 
@@ -178,9 +188,12 @@ export const deleteWarehouse = async (req, res) => {
     `;
     return res.status(204).end();
   } catch (error) {
-    console.error(`Error deleting warehouse ${warehouseId}: ${error}`);
+    console.error(
+      `Error deleting warehouse ${warehouseId}: ${error.message}`,
+      error
+    );
     return res
       .status(500)
-      .json({ message: `Error deleting warehouse ${warehouseId}` });
+      .json({ message: `Error deleting warehouse ${warehouseId}.` });
   }
 };

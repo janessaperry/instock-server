@@ -17,8 +17,10 @@ export const getAllInventories = async (_req, res) => {
     `;
     return res.status(200).json(inventoriesData);
   } catch (error) {
-    console.error(`Error getting inventories: ${error}`);
-    res.status(500).send("Error getting inventories");
+    console.error(`Error getting inventories: ${error.message}`, error);
+    return res.status(500).json({
+      message: "Error getting inventory data.",
+    });
   }
 };
 
@@ -45,6 +47,9 @@ export const deleteInventoryById = async (req, res) => {
 
     return res.status(204).end();
   } catch (error) {
-    console.error(`Error deleting inventory item: ${error}`);
+    console.error(`Error deleting inventory item: ${error.message}`, error);
+    return res
+      .status(500)
+      .json({ message: "Error deleting inventory item by id." });
   }
 };
