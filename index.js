@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import "dotenv/config";
+import { errorHandler } from "./middleware/errorHandler.js";
 import warehousesRoutes from "./routes/warehouses-routes.js";
 import inventoriesRoutes from "./routes/inventories-routes.js";
 
@@ -12,6 +13,8 @@ app.use(express.json());
 
 app.use("/warehouses", warehousesRoutes);
 app.use("/inventories", inventoriesRoutes);
+
+app.use(errorHandler);
 
 app.listen(SERVER_PORT, () => {
   console.log(`Server is running on port ${SERVER_PORT}`);

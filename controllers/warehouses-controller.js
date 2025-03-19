@@ -1,199 +1,70 @@
-import sql from "../db/db.js";
+import { Warehouses } from "../models/warehouses-model.js";
 
-export const getAllWarehouses = async (_req, res) => {
+export const getAllWarehouses = async (_req, res, next) => {
   try {
-    const warehousesData = await sql`
-      SELECT 
-        id, 
-        warehouse_name, 
-        address, 
-        city, 
-        country, 
-        contact_name, 
-        contact_position, 
-        contact_phone, 
-        contact_email
-      FROM warehouses
-      ORDER BY id
-    `;
+    const warehousesData = await Warehouses.findAll();
     return res.status(200).json(warehousesData);
   } catch (error) {
-    console.error("Error getting warehouses:", error);
-    return res
-      .status(500)
-      .json({ message: `Error getting warehouses: ${error.message}`, error });
+    next(error);
   }
 };
 
-export const getWarehouseById = async (req, res) => {
+export const getWarehouseById = async (req, res, next) => {
   const { warehouseId } = req.params;
   try {
-    const warehouseDetailsData = await sql`
-      SELECT 
-        id,
-        warehouse_name,
-        address,
-        city,
-        country,
-        contact_name,
-        contact_position,
-        contact_phone,
-        contact_email
-      FROM warehouses
-      WHERE id = ${warehouseId}
-      LIMIT 1
-    `;
-
-    let foundWarehouse = warehouseDetailsData[0];
-
-    if (!foundWarehouse) {
-      return res
-        .status(404)
-        .json({ message: `Warehouse with id ${warehouseId} not found.` });
-    }
-
-    return res.status(200).json(foundWarehouse);
+    const warehouse = await Warehouses.findById(warehouseId);
+    return res.status(200).json(warehouse);
   } catch (error) {
-    console.error(
-      `Error getting warehouse ${warehouseId} by id: ${error.message}`,
-      error
-    );
-    return res.status(500).json({ message: `Error getting warehouse by id.` });
+    next(error);
   }
 };
 
-export const getWarehouseInventoryById = async (req, res) => {
+export const getWarehouseInventoryById = async (req, res, next) => {
   const { warehouseId } = req.params;
   try {
-    const warehouseDetailsData = await sql`
-      SELECT 
-        id,
-        warehouse_name,
-        address,
-        city,
-        country,
-        contact_name,
-        contact_position,
-        contact_phone,
-        contact_email
-      FROM warehouses
-      WHERE id = ${warehouseId}
-      LIMIT 1
-    `;
-
-    let foundWarehouse = warehouseDetailsData[0];
-
-    if (!foundWarehouse) {
-      return res
-        .status(404)
-        .json({ message: `Warehouse with id ${warehouseId} not found` });
-    }
-
-    const inventoryData = await sql`
-      SELECT 
-        id,
-        item_name,
-        category,
-        status,
-        quantity
-      FROM inventories
-      WHERE warehouse_id = ${warehouseId}
-    `;
-
+    const inventoryData = await Warehouses.getInventory(warehouseId);
     return res.status(200).json(inventoryData);
   } catch (error) {
-    console.error(
-      `Error getting inventory for warehouse ${warehouseId}: ${error.message}`,
-      error
-    );
-    return res.status(500).json({
-      message: `Error getting inventory by warehouse id.`,
-    });
+    next(error);
   }
 };
 
-export const addNewWarehouse = async (req, res) => {
+export const addNewWarehouse = async (req, res, next) => {
   const newWarehouse = req.body;
-  try {
-    await sql`
-      INSERT INTO warehouses ${sql(newWarehouse)}
-    `;
+  //todo need to add form validation check and throw new error
 
+  try {
+    await Warehouses.create(newWarehouse);
     return res
       .status(201)
       .json({ message: "New warehouse succesfully added", newWarehouse });
   } catch (error) {
-    console.error(`Error adding new warehouse: ${error.message}`, error);
-    return res
-      .status(500)
-      .json({ message: `Error adding new warehouse to database.` });
+    next(error);
   }
 };
 
-export const editExistingWarehouse = async (req, res) => {
+export const editExistingWarehouse = async (req, res, next) => {
   const { warehouseId } = req.params;
   const updatedWarehouse = req.body;
+  //todo need to add form validation check and throw new error
+
   try {
-    const warehouseDetailsData = await sql`
-      SELECT 
-        id,
-        warehouse_name,
-        address,
-        city,
-        country,
-        contact_name,
-        contact_position,
-        contact_phone,
-        contact_email
-      FROM warehouses
-      WHERE id = ${warehouseId}
-      LIMIT 1
-    `;
-
-    let foundWarehouse = warehouseDetailsData[0] || null;
-
-    if (!foundWarehouse) {
-      return res
-        .status(404)
-        .json({ message: `Warehouse with id ${warehouseId} not found` });
-    }
-
-    await sql`
-      UPDATE warehouses
-      SET ${sql(updatedWarehouse)}
-      WHERE id = ${warehouseId}
-    `;
-
+    await Warehouses.update(warehouseId, updatedWarehouse);
     return res.status(200).json({
       message: `Warehouse ${warehouseId} updated successfully`,
       updatedWarehouse,
     });
   } catch (error) {
-    console.error(
-      `Error updating warehouse ${warehouseId}: ${error.message}`,
-      error
-    );
-    return res
-      .status(500)
-      .json({ message: `Error updating warehouse ${warehouseId}.` });
+    next(error);
   }
 };
 
-export const deleteWarehouse = async (req, res) => {
+export const deleteWarehouse = async (req, res, next) => {
   const { warehouseId } = req.params;
   try {
-    await sql`
-      DELETE FROM warehouses
-      WHERE id = ${warehouseId}
-    `;
+    await Warehouses.delete(warehouseId);
     return res.status(204).end();
   } catch (error) {
-    console.error(
-      `Error deleting warehouse ${warehouseId}: ${error.message}`,
-      error
-    );
-    return res
-      .status(500)
-      .json({ message: `Error deleting warehouse ${warehouseId}.` });
+    next(error);
   }
 };
