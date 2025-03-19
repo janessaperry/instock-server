@@ -1,5 +1,9 @@
 import sql from "../db/db.js";
-import { NotFoundError, DatabaseError } from "../utils/errors.js";
+import {
+  ValidationError,
+  NotFoundError,
+  DatabaseError,
+} from "../utils/errors.js";
 
 export class Warehouses {
   static async findAll() {
@@ -19,7 +23,7 @@ export class Warehouses {
         ORDER BY id
       `;
     } catch (error) {
-      throw new DatabaseError(`Error fetching warehouses.`);
+      throw new DatabaseError(`Error fetching warehouses: ${error.message}`);
     }
   }
 
@@ -49,7 +53,9 @@ export class Warehouses {
       return foundWarehouse;
     } catch (error) {
       if (error instanceof NotFoundError) throw error;
-      throw new DatabaseError(`Error fetching warehouses ${warehouseId}.`);
+      throw new DatabaseError(
+        `Error fetching warehouse ${warehouseId}: ${error.message}`
+      );
     }
   }
 
@@ -71,7 +77,7 @@ export class Warehouses {
     } catch (error) {
       if (error instanceof NotFoundError) throw error;
       throw new DatabaseError(
-        `Error getting inventory for warehouse ${warehouseId}.`
+        `Error getting inventory for warehouse ${warehouseId}: ${error.message}`
       );
     }
   }
@@ -82,7 +88,9 @@ export class Warehouses {
         INSERT INTO warehouses ${sql(warehouseData)} 
       `;
     } catch (error) {
-      throw new DatabaseError(`Error adding new warehouse to database.`);
+      throw new DatabaseError(
+        `Error adding new warehouse to database: ${error.message}`
+      );
     }
   }
 
@@ -96,7 +104,9 @@ export class Warehouses {
       `;
     } catch (error) {
       if (error instanceof NotFoundError) throw error;
-      throw new DatabaseError(`Error updating warehouse ${warehouseId}.`);
+      throw new DatabaseError(
+        `Error updating warehouse ${warehouseId}: ${error.message}`
+      );
     }
   }
 
@@ -109,7 +119,9 @@ export class Warehouses {
       `;
     } catch (error) {
       if (error instanceof NotFoundError) throw error;
-      throw new DatabaseError(`Error deleting warehouse ${warehouseId}.`);
+      throw new DatabaseError(
+        `Error deleting warehouse ${warehouseId}: ${error.message}`
+      );
     }
   }
 }

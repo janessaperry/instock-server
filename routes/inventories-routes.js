@@ -4,6 +4,7 @@ const router = express.Router();
 
 router
   .get("/", InventoriesController.getAllInventories)
+  .get("/:inventoryId", InventoriesController.getInventoryById)
   .delete("/:inventoryId", InventoriesController.deleteInventoryById);
 
 export default router;
