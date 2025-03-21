@@ -29,8 +29,17 @@ export class Inventories {
   static async getById(inventoryId) {
     try {
       const inventoryItem = await sql`
-        SELECT * FROM inventories
-        WHERE id = ${inventoryId}
+        SELECT
+          inventories.id,
+          warehouses.warehouse_name,
+          inventories.item_name,
+          inventories.description,
+          inventories.category,
+          inventories.status,
+          inventories.quantity
+        FROM inventories
+        INNER JOIN warehouses ON inventories.warehouse_id=warehouses.id
+        WHERE inventories.id = ${inventoryId}
       `;
 
       let foundInventoryItem = inventoryItem[0];

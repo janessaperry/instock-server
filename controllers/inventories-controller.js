@@ -1,5 +1,6 @@
 import sql from "../db/db.js";
 import { Inventories } from "../models/inventories-model.js";
+import { camelCaseKeys } from "../utils/helpers.js";
 
 export const getAllInventories = async (_req, res, next) => {
   try {
@@ -13,7 +14,8 @@ export const getAllInventories = async (_req, res, next) => {
 export const getInventoryById = async (req, res, next) => {
   const { inventoryId } = req.params;
   try {
-    const inventoryItemDetails = await Inventories.getById(inventoryId);
+    const response = await Inventories.getById(inventoryId);
+    const inventoryItemDetails = camelCaseKeys(response);
     res.status(200).json(inventoryItemDetails);
   } catch (error) {
     next(error);
