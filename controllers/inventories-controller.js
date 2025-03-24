@@ -11,6 +11,18 @@ export const getAllInventories = async (_req, res, next) => {
   }
 };
 
+export const getInventoryCategories = async (_req, res, next) => {
+  try {
+    const response = await Inventories.getCategories();
+    const inventoryCategories = response.map((item, index) => {
+      return { id: (index + 1).toString(), value: item.category };
+    });
+    return res.status(200).json(inventoryCategories);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getInventoryById = async (req, res, next) => {
   const { inventoryId } = req.params;
   try {
