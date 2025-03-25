@@ -71,6 +71,23 @@ export class Inventories {
     }
   }
 
+  static async create(inventoryItemData) {
+    console.log("CREATE");
+    try {
+      return await sql`
+        INSERT INTO inventories ${sql(inventoryItemData)}
+      `;
+    } catch (error) {
+      throw new DatabaseError(
+        `Error adding new inventory item to database: ${error.message}`
+      );
+    }
+  }
+
+  static async update() {
+    console.log("UPDATE");
+  }
+
   static async delete(inventoryId) {
     try {
       await this.getById(inventoryId);

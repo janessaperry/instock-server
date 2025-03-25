@@ -34,6 +34,29 @@ export const getInventoryById = async (req, res, next) => {
   }
 };
 
+export const addNewInventoryItem = async (req, res, next) => {
+  const newInventoryItem = req.body;
+
+  try {
+    console.log("ADD NEW ITEM");
+    await Inventories.create(newInventoryItem);
+    return res.status(201).json({
+      message: "New inventory item successfully added",
+      newInventoryItem,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const editExistingInventoryItem = async (req, res, next) => {
+  try {
+    console.log("ADD NEW ITEM");
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const deleteInventoryById = async (req, res, next) => {
   const { inventoryId } = req.params;
   try {
