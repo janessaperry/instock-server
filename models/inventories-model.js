@@ -72,7 +72,6 @@ export class Inventories {
   }
 
   static async create(inventoryItemData) {
-    console.log("CREATE");
     try {
       return await sql`
         INSERT INTO inventories ${sql(inventoryItemData)}
@@ -84,8 +83,19 @@ export class Inventories {
     }
   }
 
-  static async update() {
-    console.log("UPDATE");
+  static async update(inventoryId, inventoryItemData) {
+    try {
+      await this.getById(inventoryId);
+      await sql`
+        UPDATE inventories
+        SET ${sql(inventoryItemData)}
+        WHERE ID = ${inventoryId}
+      `;
+    } catch (error) {
+      throw new DatabaseError(
+        `Error updating inventory item: ${error.message}`
+      );
+    }
   }
 
   static async delete(inventoryId) {

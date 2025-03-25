@@ -36,9 +36,7 @@ export const getInventoryById = async (req, res, next) => {
 
 export const addNewInventoryItem = async (req, res, next) => {
   const newInventoryItem = req.body;
-
   try {
-    console.log("ADD NEW ITEM");
     await Inventories.create(newInventoryItem);
     return res.status(201).json({
       message: "New inventory item successfully added",
@@ -50,8 +48,14 @@ export const addNewInventoryItem = async (req, res, next) => {
 };
 
 export const editExistingInventoryItem = async (req, res, next) => {
+  const { inventoryId } = req.params;
+  const updatedInventoryItem = req.body;
   try {
-    console.log("ADD NEW ITEM");
+    await Inventories.update(inventoryId, updatedInventoryItem);
+    return res.status(200).json({
+      message: `Inventory item ${inventoryId} updated successfully`,
+      updatedInventoryItem,
+    });
   } catch (error) {
     next(error);
   }
