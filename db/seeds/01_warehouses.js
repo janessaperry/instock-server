@@ -9,7 +9,7 @@ export async function seed() {
         ('Manhattan', '503 Broadway', 'New York', 'USA', 'Parmin Aujla', 'Warehouse Manager', '+1 (646) 123-1234', 'paujla@instock.com'),
         ('Washington', '33 Pearl Street SW', 'Washington', 'USA', 'Greame Lyon', 'Warehouse Manager', '+1 (646) 123-1234', 'glyon@instock.com'),
         ('Jersey', '300 Main Street', 'New Jersey', 'USA', 'Brad MacDonald', 'Warehouse Manager', '+1 (646) 123-1234', 'bmcdonald@instock.com'),
-        ('SF', '890 Brannnan Street', 'San Francisco', 'USA', 'Gary Wong', 'Warehouse Manager', '+1 (646) 123-1234', 'gwong@instock.com'),
+        ('SF', '890 Brannan Street', 'San Francisco', 'USA', 'Gary Wong', 'Warehouse Manager', '+1 (646) 123-1234', 'gwong@instock.com'),
         ('Santa Monica', '520 Broadway', 'Santa Monica', 'USA', 'Sharon Ng', 'Warehouse Manager', '+1 (646) 123-1234', 'sng@instock.com'),
         ('Seattle', '1201 Third Avenue', 'Seattle', 'USA', 'Daniel Bachu', 'Warehouse Manager', '+1 (646) 123-1234', 'dbachu@instock.com'),
         ('Miami', '2650 NW 5th Avenue', 'Miami', 'USA', 'Alana Thomas', 'Warehouse Manager', '+1 (646) 123-1234', 'athomas@instock.com'),
