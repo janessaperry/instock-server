@@ -1,5 +1,5 @@
-import { up as warehousesUp } from "./migrations/tables/01_warehouses.js";
-import { up as inventoriesUp } from "./migrations/tables/02_inventories.js";
+import { up as warehousesUp } from "./migrations/01_warehouses.js";
+import { up as inventoriesUp } from "./migrations/02_inventories.js";
 import sql from "./db.js";
 
 const runMigrations = async () => {
