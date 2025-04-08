@@ -24,6 +24,18 @@ export async function up() {
           ON DELETE CASCADE
       )
     `;
+
+    await sql`
+      ALTER TABLE inventories ENABLE ROW LEVEL SECURITY;
+    `;
+
+    await sql`
+      CREATE POLICY "Allow all operations"
+      ON inventories
+      FOR ALL
+      USING (true);
+    `;
+
     console.log('Table "inventories" created successfully');
   } catch (error) {
     console.error('Error creating "inventories" table:', error);
