@@ -21,6 +21,18 @@ export async function up() {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `;
+
+    await sql`
+      ALTER TABLE warehouses ENABLE ROW LEVEL SECURITY;
+    `;
+
+    await sql`
+      CREATE POLICY "Allow all operations"
+      ON warehouses
+      FOR ALL
+      USING (true);
+    `;
+
     console.log('Table "warehouses" created successfully');
   } catch (error) {
     console.error('Error creating "warehouses" table:', error);
