@@ -1,4 +1,12 @@
-import sql from "../db.js";
+import sql from "../../db.js";
+import {
+  createUpdateTimestamp,
+  dropUpdateTimestamp,
+} from "../helpers/timestamps/create-update-timestamp.js";
+import {
+  createUpdateTimestampTrigger,
+  dropUpdateTimestampTrigger,
+} from "../helpers/timestamps/trigger-update-timestamp.js";
 
 export async function up() {
   try {
@@ -36,6 +44,12 @@ export async function up() {
       USING (true);
     `;
 
+    await createUpdateTimestampTrigger(
+      "trig_b_u_inv_updated_at",
+      "inventories"
+    );
+    await createUpdateTimestamp();
+
     console.log('Table "inventories" created successfully');
   } catch (error) {
     console.error('Error creating "inventories" table:', error);
@@ -44,9 +58,10 @@ export async function up() {
 
 export async function down() {
   try {
-    await sql`
-      DROP TABLE IF EXISTS inventories
-    `;
+    await dropUpdateTimestampTrigger("trig_b_u_inv_updated_at", "inventories");
+    await dropUpdateTimestamp();
+    await sql`DROP TABLE IF EXISTS warehouses`;
+    await sql`DROP TABLE IF EXISTS inventories`;
     console.log('Table "inventories" dropped successfully');
   } catch (error) {
     console.error('Error dropping "inventories" table:', error);
