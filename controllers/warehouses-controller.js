@@ -1,4 +1,5 @@
 import { Warehouses } from "../models/warehouses-model.js";
+import { validatePayload } from "../utils/validation.js";
 
 export const getAllWarehouses = async (_req, res, next) => {
   try {
@@ -31,9 +32,28 @@ export const getWarehouseInventoryById = async (req, res, next) => {
 
 export const addNewWarehouse = async (req, res, next) => {
   const newWarehouse = req.body;
-  //todo need to add form validation check and throw new error
+  console.log(newWarehouse);
 
   try {
+    const validationResults = {
+      warehouse_name: "",
+      address: "",
+      city: "",
+      country: "",
+      contact_name: "",
+      contact_position: "",
+      contact_phone: "",
+      contact_email: "",
+    };
+    let isValidated = validatePayload(newWarehouse, validationResults);
+
+    if (!isValidated) {
+      return res.status(400).json({
+        message: "Issues with payload",
+        errors: validationResults,
+      });
+    }
+
     await Warehouses.create(newWarehouse);
     return res
       .status(201)
@@ -46,9 +66,27 @@ export const addNewWarehouse = async (req, res, next) => {
 export const editExistingWarehouse = async (req, res, next) => {
   const { warehouseId } = req.params;
   const updatedWarehouse = req.body;
-  //todo need to add form validation check and throw new error
 
   try {
+    const validationResults = {
+      warehouse_name: "",
+      address: "",
+      city: "",
+      country: "",
+      contact_name: "",
+      contact_position: "",
+      contact_phone: "",
+      contact_email: "",
+    };
+    let isValidated = validatePayload(updatedWarehouse, validationResults);
+
+    if (!isValidated) {
+      return res.status(400).json({
+        message: "Issues with payload",
+        errors: validationResults,
+      });
+    }
+
     await Warehouses.update(warehouseId, updatedWarehouse);
     return res.status(200).json({
       message: `Warehouse ${warehouseId} updated successfully`,

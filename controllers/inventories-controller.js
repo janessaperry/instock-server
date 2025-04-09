@@ -1,6 +1,7 @@
 import sql from "../db/db.js";
 import { Inventories } from "../models/inventories-model.js";
 import { camelCaseKeys } from "../utils/helpers.js";
+import { validatePayload } from "../utils/validation.js";
 
 export const getAllInventories = async (_req, res, next) => {
   try {
@@ -36,7 +37,25 @@ export const getInventoryById = async (req, res, next) => {
 
 export const addNewInventoryItem = async (req, res, next) => {
   const newInventoryItem = req.body;
+
   try {
+    const validationResults = {
+      item_name: "",
+      description: "",
+      category: "",
+      status: "",
+      quantity: "",
+      warehouse_id: "",
+    };
+    let isValidated = validatePayload(newInventoryItem, validationResults);
+
+    if (!isValidated) {
+      return res.status(400).json({
+        message: "Issues with payload",
+        errors: validationResults,
+      });
+    }
+
     await Inventories.create(newInventoryItem);
     return res.status(201).json({
       message: "New inventory item successfully added",
@@ -50,7 +69,25 @@ export const addNewInventoryItem = async (req, res, next) => {
 export const editExistingInventoryItem = async (req, res, next) => {
   const { inventoryId } = req.params;
   const updatedInventoryItem = req.body;
+
   try {
+    const validationResults = {
+      item_name: "",
+      description: "",
+      category: "",
+      status: "",
+      quantity: "",
+      warehouse_id: "",
+    };
+    let isValidated = validatePayload(updatedInventoryItem, validationResults);
+
+    if (!isValidated) {
+      return res.status(400).json({
+        message: "Issues with payload",
+        errors: validationResults,
+      });
+    }
+
     await Inventories.update(inventoryId, updatedInventoryItem);
     return res.status(200).json({
       message: `Inventory item ${inventoryId} updated successfully`,
