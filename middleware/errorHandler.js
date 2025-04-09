@@ -8,5 +8,10 @@ export const errorHandler = (err, req, res, next) => {
       ? "Something went wrong, please try again later."
       : err.message;
 
-  return res.status(status).json({ status: "error", message: message });
+  const response = { status: "error", message: message };
+  if (err.errors) {
+    response.errors = err.errors;
+  }
+
+  return res.status(status).json(response);
 };

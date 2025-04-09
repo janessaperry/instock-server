@@ -1,4 +1,5 @@
 import sql from "../db/db.js";
+import { Warehouses } from "./warehouses-model.js";
 import {
   ValidationError,
   NotFoundError,
@@ -73,10 +74,13 @@ export class Inventories {
 
   static async create(inventoryItemData) {
     try {
+      await this.validateWarehouseId(inventoryItemData.warehouse_id);
       return await sql`
         INSERT INTO inventories ${sql(inventoryItemData)}
       `;
     } catch (error) {
+      if (error instanceof ValidationError) throw error;
+
       throw new DatabaseError(
         `Error adding new inventory item to database: ${error.message}`
       );
@@ -85,6 +89,7 @@ export class Inventories {
 
   static async update(inventoryId, inventoryItemData) {
     try {
+      await this.validateWarehouseId(inventoryItemData.warehouse_id);
       await this.getById(inventoryId);
       await sql`
         UPDATE inventories
@@ -110,6 +115,19 @@ export class Inventories {
       throw new DatabaseError(
         `Error deleting inventory item ${inventoryId}: ${error.message}`
       );
+    }
+  }
+
+  static async validateWarehouseId(warehouseId) {
+    try {
+      await Warehouses.getById(warehouseId);
+    } catch (error) {
+      if (error instanceof NotFoundError) {
+        throw new ValidationError(
+          `Failed to validate warehouse id ${warehouseId}`
+        );
+      }
+      throw error;
     }
   }
 }

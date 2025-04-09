@@ -1,9 +1,10 @@
 import { Warehouses } from "../models/warehouses-model.js";
+import { ValidationError } from "../utils/errors.js";
 import { validatePayload } from "../utils/validation.js";
 
 export const getAllWarehouses = async (_req, res, next) => {
   try {
-    const warehousesData = await Warehouses.findAll();
+    const warehousesData = await Warehouses.getAll();
     return res.status(200).json(warehousesData);
   } catch (error) {
     next(error);
@@ -13,7 +14,7 @@ export const getAllWarehouses = async (_req, res, next) => {
 export const getWarehouseById = async (req, res, next) => {
   const { warehouseId } = req.params;
   try {
-    const warehouse = await Warehouses.findById(warehouseId);
+    const warehouse = await Warehouses.getById(warehouseId);
     return res.status(200).json(warehouse);
   } catch (error) {
     next(error);
@@ -32,7 +33,6 @@ export const getWarehouseInventoryById = async (req, res, next) => {
 
 export const addNewWarehouse = async (req, res, next) => {
   const newWarehouse = req.body;
-  console.log(newWarehouse);
 
   try {
     const validationResults = {
@@ -48,10 +48,10 @@ export const addNewWarehouse = async (req, res, next) => {
     let isValidated = validatePayload(newWarehouse, validationResults);
 
     if (!isValidated) {
-      return res.status(400).json({
-        message: "Issues with payload",
-        errors: validationResults,
-      });
+      throw new ValidationError(
+        "Issues with payload for adding warehouse",
+        validationResults
+      );
     }
 
     await Warehouses.create(newWarehouse);
@@ -81,10 +81,10 @@ export const editExistingWarehouse = async (req, res, next) => {
     let isValidated = validatePayload(updatedWarehouse, validationResults);
 
     if (!isValidated) {
-      return res.status(400).json({
-        message: "Issues with payload",
-        errors: validationResults,
-      });
+      throw new ValidationError(
+        "Issues with payload for editing warehouse",
+        validationResults
+      );
     }
 
     await Warehouses.update(warehouseId, updatedWarehouse);

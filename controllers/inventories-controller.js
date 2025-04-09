@@ -1,5 +1,5 @@
-import sql from "../db/db.js";
 import { Inventories } from "../models/inventories-model.js";
+import { ValidationError } from "../utils/errors.js";
 import { camelCaseKeys } from "../utils/helpers.js";
 import { validatePayload } from "../utils/validation.js";
 
@@ -50,10 +50,10 @@ export const addNewInventoryItem = async (req, res, next) => {
     let isValidated = validatePayload(newInventoryItem, validationResults);
 
     if (!isValidated) {
-      return res.status(400).json({
-        message: "Issues with payload",
-        errors: validationResults,
-      });
+      throw new ValidationError(
+        "Issues with payload for adding inventory item",
+        validationResults
+      );
     }
 
     await Inventories.create(newInventoryItem);
@@ -82,10 +82,10 @@ export const editExistingInventoryItem = async (req, res, next) => {
     let isValidated = validatePayload(updatedInventoryItem, validationResults);
 
     if (!isValidated) {
-      return res.status(400).json({
-        message: "Issues with payload",
-        errors: validationResults,
-      });
+      throw new ValidationError(
+        "Issues with payload for editing inventory item",
+        validationResults
+      );
     }
 
     await Inventories.update(inventoryId, updatedInventoryItem);

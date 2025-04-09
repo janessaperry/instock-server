@@ -1,12 +1,8 @@
 import sql from "../db/db.js";
-import {
-  ValidationError,
-  NotFoundError,
-  DatabaseError,
-} from "../utils/errors.js";
+import { NotFoundError, DatabaseError } from "../utils/errors.js";
 
 export class Warehouses {
-  static async findAll() {
+  static async getAll() {
     try {
       return await sql`
         SELECT 
@@ -27,7 +23,7 @@ export class Warehouses {
     }
   }
 
-  static async findById(warehouseId) {
+  static async getById(warehouseId) {
     try {
       const warehouseDetailsData = await sql`
         SELECT 
@@ -61,7 +57,7 @@ export class Warehouses {
 
   static async getInventory(warehouseId) {
     try {
-      await this.findById(warehouseId);
+      await this.getById(warehouseId);
       const inventoryData = await sql`
         SELECT 
           id,
@@ -96,7 +92,7 @@ export class Warehouses {
 
   static async update(warehouseId, warehouseData) {
     try {
-      await this.findById(warehouseId);
+      await this.getById(warehouseId);
       await sql`
         UPDATE warehouses
         SET ${sql(warehouseData)}
@@ -112,7 +108,7 @@ export class Warehouses {
 
   static async delete(warehouseId) {
     try {
-      await this.findById(warehouseId);
+      await this.getById(warehouseId);
       await sql`
         DELETE FROM warehouses
         WHERE id = ${warehouseId}
