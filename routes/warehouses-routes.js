@@ -1,5 +1,6 @@
 import express from "express";
 import * as warehouseController from "../controllers/warehouses-controller.js";
+import { writeOperationsLimiter } from "../middleware/rateLimiter.js";
 const router = express.Router();
 
 router
@@ -9,8 +10,16 @@ router
     "/:warehouseId/inventories",
     warehouseController.getWarehouseInventoryById
   )
-  .post("/add", warehouseController.addNewWarehouse)
-  .put("/:warehouseId/edit", warehouseController.editExistingWarehouse)
-  .delete("/:warehouseId", warehouseController.deleteWarehouse);
+  .post("/add", writeOperationsLimiter, warehouseController.addNewWarehouse)
+  .put(
+    "/:warehouseId/edit",
+    writeOperationsLimiter,
+    warehouseController.editExistingWarehouse
+  )
+  .delete(
+    "/:warehouseId",
+    writeOperationsLimiter,
+    warehouseController.deleteWarehouse
+  );
 
 export default router;
