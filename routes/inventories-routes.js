@@ -5,7 +5,6 @@ const router = express.Router();
 
 router
   .get("/", InventoriesController.getAllInventories)
-  .get("/categories", InventoriesController.getInventoryCategories)
   .get("/:inventoryId", InventoriesController.getInventoryById)
   .post(
     "/add",

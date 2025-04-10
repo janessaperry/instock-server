@@ -27,21 +27,6 @@ export class Inventories {
     }
   }
 
-  static async getCategories() {
-    try {
-      return await sql`
-        SELECT DISTINCT
-          category
-        FROM inventories
-        ORDER BY category
-      `;
-    } catch (error) {
-      throw new DatabaseError(
-        `Error getting inventory categories: ${error.message}`
-      );
-    }
-  }
-
   static async getById(inventoryId) {
     try {
       const inventoryItem = await sql`

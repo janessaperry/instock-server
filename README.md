@@ -28,7 +28,6 @@ Warehouses
 Inventories
 
 - GET /inventories: Get all inventory items
-- GET /inventories/categories: Get inventory categories
 - GET /inventories/:inventoryId: Get inventory item by ID
 - POST /inventories/add: Add new inventory item
 - PUT /inventories/:inventoryId/edit: Update inventory item
