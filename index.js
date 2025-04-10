@@ -1,9 +1,10 @@
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import "dotenv/config";
 import { errorHandler } from "./middleware/errorHandler.js";
 import warehousesRoutes from "./routes/warehouses-routes.js";
 import inventoriesRoutes from "./routes/inventories-routes.js";
+import "./scripts/cron/scheduled-seed.js";
 
 const app = express();
 const { SERVER_PORT, CORS_ORIGIN } = process.env;
