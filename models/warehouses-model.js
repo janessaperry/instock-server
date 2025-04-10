@@ -1,4 +1,4 @@
-import sql from "../db/db.js";
+import sql from "../db/index.js";
 import { NotFoundError, DatabaseError } from "../utils/errors.js";
 
 export class Warehouses {

@@ -1,20 +1,19 @@
-import sql from "../db.js";
 import {
   createUpdateTimestamp,
   dropUpdateTimestamp,
-} from "./helpers/timestamps/create-update-timestamp.js";
+} from "./functions/timestamps/create_update_timestamp.js";
 import {
   createUpdateTimestampTrigger,
   dropUpdateTimestampTrigger,
-} from "./helpers/timestamps/trigger-update-timestamp.js";
+} from "./functions/timestamps/trigger_update_timestamp.js";
 import {
   createInventoriesTable,
   dropInventoriesTable,
 } from "./tables/02_create_inventories_table.js";
 
-export async function up() {
+export async function up(sql) {
   try {
-    await createInventoriesTable();
+    await createInventoriesTable(sql);
 
     await sql`
       ALTER TABLE inventories ENABLE ROW LEVEL SECURITY;
@@ -28,10 +27,11 @@ export async function up() {
     `;
 
     await createUpdateTimestampTrigger(
+      sql,
       "trig_b_u_inv_updated_at",
       "inventories"
     );
-    await createUpdateTimestamp();
+    await createUpdateTimestamp(sql);
 
     console.log('Table "inventories" created successfully');
   } catch (error) {
@@ -39,11 +39,15 @@ export async function up() {
   }
 }
 
-export async function down() {
+export async function down(sql) {
   try {
-    await dropUpdateTimestampTrigger("trig_b_u_inv_updated_at", "inventories");
-    await dropUpdateTimestamp();
-    await dropInventoriesTable();
+    await dropUpdateTimestampTrigger(
+      sql,
+      "trig_b_u_inv_updated_at",
+      "inventories"
+    );
+    await dropUpdateTimestamp(sql);
+    await dropInventoriesTable(sql);
     console.log('Table "inventories" dropped successfully');
   } catch (error) {
     console.error('Error dropping "inventories" table:', error);

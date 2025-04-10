@@ -1,4 +1,4 @@
-import sql from "../db/db.js";
+import sql from "../db/index.js";
 import { Warehouses } from "./warehouses-model.js";
 import {
   ValidationError,

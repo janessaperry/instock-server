@@ -1,8 +1,7 @@
-import sql from "../db.js";
-
-export async function seed() {
+export async function seed(sql) {
   try {
     await sql`DELETE FROM inventories`;
+    await sql`SELECT setval('inventories_id_seq', 1, false)`;
     await sql`
       INSERT INTO inventories (warehouse_id, item_name, description, category, status, quantity)
       VALUES
@@ -80,6 +79,5 @@ export async function seed() {
     console.log("Inventories data seeded successfully");
   } catch (error) {
     console.error("Error seeding inventories data:", error);
-    process.exit(1);
   }
 }

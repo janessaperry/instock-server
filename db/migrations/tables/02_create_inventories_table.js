@@ -1,6 +1,4 @@
-import sql from "../../db.js";
-
-export async function createInventoriesTable() {
+export async function createInventoriesTable(sql) {
   try {
     await sql`
       DROP TABLE IF EXISTS inventories
@@ -31,7 +29,7 @@ export async function createInventoriesTable() {
   }
 }
 
-export async function dropInventoriesTable() {
+export async function dropInventoriesTable(sql) {
   try {
     await sql`DROP TABLE IF EXISTS warehouses`;
     await sql`DROP TABLE IF EXISTS inventories`;

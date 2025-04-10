@@ -1,8 +1,7 @@
-import sql from "../db.js";
-
-export async function seed() {
+export async function seed(sql) {
   try {
     await sql`DELETE FROM warehouses`;
+    await sql`SELECT setval('warehouses_id_seq', 1, false)`;
     await sql`
       INSERT INTO warehouses (warehouse_name, address, city, country, contact_name, contact_position, contact_phone, contact_email)
       VALUES
@@ -18,6 +17,5 @@ export async function seed() {
     console.log("Warehouses data seeded successfully");
   } catch (error) {
     console.error("Error seeding warehouses data:", error);
-    process.exit(1);
   }
 }

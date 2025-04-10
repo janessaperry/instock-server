@@ -1,6 +1,4 @@
-import sql from "../../../index.js";
-
-export async function createUpdateTimestamp() {
+export async function createUpdateTimestamp(sql) {
   try {
     await sql`
       CREATE OR REPLACE FUNCTION update_timestamp()
@@ -16,7 +14,7 @@ export async function createUpdateTimestamp() {
   } catch (error) {}
 }
 
-export async function dropUpdateTimestamp() {
+export async function dropUpdateTimestamp(sql) {
   try {
     await sql`DROP FUNCTION IF EXISTS update_timestamp`;
     console.log(`updateTimestamp dropped successfully`);

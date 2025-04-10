@@ -1,6 +1,8 @@
-import sql from "../../../index.js";
-
-export async function createUpdateTimestampTrigger(triggerName, tableName) {
+export async function createUpdateTimestampTrigger(
+  sql,
+  triggerName,
+  tableName
+) {
   try {
     await sql`
       CREATE TRIGGER ${sql(triggerName)}
@@ -14,7 +16,7 @@ export async function createUpdateTimestampTrigger(triggerName, tableName) {
   }
 }
 
-export async function dropUpdateTimestampTrigger(triggerName, tableName) {
+export async function dropUpdateTimestampTrigger(sql, triggerName, tableName) {
   try {
     await sql`DROP TRIGGER IF EXISTS ${sql(triggerName)} ON ${sql(tableName)}`;
     console.log(`Trigger ${triggerName} dropped successfully`);

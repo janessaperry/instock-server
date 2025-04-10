@@ -1,6 +1,4 @@
-import sql from "../../db.js";
-
-export async function createWarehousesTable() {
+export async function createWarehousesTable(sql) {
   try {
     await sql`
       DROP TABLE IF EXISTS warehouses CASCADE
@@ -27,7 +25,7 @@ export async function createWarehousesTable() {
   }
 }
 
-export async function dropWarehousesTable() {
+export async function dropWarehousesTable(sql) {
   try {
     await sql`DROP TABLE IF EXISTS warehouses`;
     console.log('Table "warehouses" dropped successfully');
