@@ -1,6 +1,12 @@
+import logger from "../utils/logger.js";
+
 export const errorHandler = (err, req, res, next) => {
-  console.error(`Message: ${err.message}`);
-  console.error(`Stack: ${err.stack}`);
+  logger.error({
+    message: err.message,
+    stack: err.stack,
+    path: req.path,
+    method: req.method,
+  });
 
   const status = err.status || 500;
   const message =
