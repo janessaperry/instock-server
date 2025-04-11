@@ -1,6 +1,7 @@
 import "dotenv/config";
 import express from "express";
 import cors from "cors";
+import { requestLogger } from "./middleware/requestLogger.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 import warehousesRoutes from "./routes/warehouses-routes.js";
 import inventoriesRoutes from "./routes/inventories-routes.js";
@@ -11,6 +12,8 @@ const { SERVER_PORT, CORS_ORIGIN } = process.env;
 
 app.use(cors({ origin: CORS_ORIGIN }));
 app.use(express.json());
+
+app.use(requestLogger);
 
 app.use("/warehouses", warehousesRoutes);
 app.use("/inventories", inventoriesRoutes);
