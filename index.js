@@ -9,6 +9,7 @@ import inventoriesRoutes from "./routes/inventories-routes.js";
 import "./scripts/cron/scheduled-seed.js";
 
 const app = express();
+app.set('trust proxy', true);
 const {SERVER_PORT, CORS_ORIGIN} = process.env;
 
 app.use(cors({origin: CORS_ORIGIN}));
