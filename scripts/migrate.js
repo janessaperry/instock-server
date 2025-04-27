@@ -2,9 +2,8 @@ import "dotenv/config";
 import postgres from "postgres";
 import { runMigrations } from "../db/migrations/index.js";
 
-let sql = postgres(process.env.DATABASE_URL);
-
 const main = async () => {
+let sql = postgres(process.env.DATABASE_URL);
   try {
     console.log("Main running migrations");
     await runMigrations(sql);

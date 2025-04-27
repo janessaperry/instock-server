@@ -6,7 +6,7 @@ export const seedOnStartup = async () => {
   let sql = postgres(process.env.DATABASE_URL);
 
   try {
-    console.log("Start up: check last_seeded_at");
+    console.log("Startup: check last_seeded_at");
     const [row] = await sql`SELECT last_seeded_at FROM seed_log`;
     const lastSeededAt = new Date(row?.last_seeded_at);
     const hours24InMs = 24 * 60 * 60 * 1000;
@@ -20,8 +20,8 @@ export const seedOnStartup = async () => {
     }
   } catch (error) {
     console.error("Error in scheduled seed:", error);
-    process.exit(1);
   } finally {
+    console.log("End startup connection");
     await sql.end();
   }
 }
